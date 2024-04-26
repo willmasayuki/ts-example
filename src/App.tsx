@@ -1,24 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ProductCard from './components/ProductCard';
+import UserCard from './components/UserCard';
+import { IElectronic, IProduce, ProduceEnum } from './types/Product.types';
+import { IEmployee, IManager, IUser } from './types/User.types';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <header className='App-header'></header>
+      <body>
+        <UserCard<IUser>
+          user={{
+            name: 'John Doe',
+            email: 'john.doe@email.com',
+            id: 1,
+          }}
+        />
+        <UserCard<IEmployee>
+          user={{
+            name: 'Jane Doe',
+            email: 'jane.doe@email.com',
+            id: 2,
+            department: 'Engineering',
+          }}
+        />
+        <UserCard<IManager>
+          user={{
+            name: 'Jesse Doe',
+            email: 'jesse.doe@email.com',
+            id: 3,
+            department: 'Project Management',
+            teamSize: 10,
+          }}
+        />
+        <ProductCard<IProduce>
+          product={{
+            name: 'Apple',
+            price: 1.0,
+            description: 'A fruit',
+            id: 1,
+            type: ProduceEnum.FRUIT,
+            weight: 0.5,
+          }}
+        />
+        <ProductCard<IProduce>
+          product={{
+            name: 'Carrot',
+            price: 0.5,
+            description: 'A vegetable',
+            id: 2,
+            type: ProduceEnum.VEGETABLE,
+            weight: 0.25,
+          }}
+        />
+        <ProductCard<IElectronic>
+          product={{
+            name: 'TV',
+            price: 500.0,
+            description: 'An electronic',
+            id: 2,
+            brand: 'Samsung',
+            model: 'QLED',
+          }}
+        />
+      </body>
     </div>
   );
 }
