@@ -1,46 +1,132 @@
-# Getting Started with Create React App
+TypeScript provides several utility types that can be extremely helpful in managing and manipulating types in more advanced ways.
+### 1. Partial<T>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The Partial utility type constructs a type with all properties of T set to optional. This means that every property of the type created with Partial becomes optional, thus allowing you to not include some properties when creating objects of that type.
+Example of Partial:
 
-## Available Scripts
+Suppose you have a type User with mandatory fields. Using Partial, you can create a type where all these fields are optional, which can be useful for functions that might only need to update some fields of the object.
 
-In the project directory, you can run:
+```
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
 
-### `npm start`
+function updateUser(user: Partial<User>) {
+  // update logic here
+}
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+// You can call updateUser with any combination of fields:
+updateUser({ name: "Alice" }); // Only update the name
+updateUser({ age: 25 }); // Only update the age
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 2. Omit<T, K>
 
-### `npm test`
+The Omit utility type constructs a type by picking all properties from T except for those specified in K. This is particularly useful when you want to create a type that should exclude certain properties of another type.
+Example of Omit:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Imagine you have a User type again, and you want to create a new type that excludes the id field because it should not be manipulated directly.
 
-### `npm run build`
+```
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+type UserWithoutID = Omit<User, 'id'>;
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+function processUser(user: UserWithoutID) {
+  // Processing logic here, no `id` field available
+}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// You can use processUser without an id:
+processUser({ name: "Bob", age: 30 });
+```
 
-### `npm run eject`
+### 3. Pick<T, K>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This utility type constructs a type by picking the set of properties K from T. It's useful when you want to create a type that only includes a subset of another type's properties.
+Example of Pick:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+type UserNameAndAge = Pick<User, 'name' | 'age'>;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+function displayUser(user: UserNameAndAge) {
+  console.log(`Name: ${user.name}, Age: ${user.age}`);
+}
+```
 
-## Learn More
+### 4. Readonly<T>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This utility type makes all properties of T read-only, which means they cannot be reassigned after their initial declaration. This is useful for creating immutable objects.
+Example of Readonly:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+type User = {
+  name: string;
+};
+
+const user: Readonly<User> = { name: "Alice" };
+user.name = "Bob"; // Error: Cannot assign to 'name' because it is a read-only property
+```
+
+### 5. Record<K, T>
+
+This utility type constructs an object type whose property keys are K and property values are T. It's useful for creating dictionary-like objects with known keys.
+Example of Record:
+
+```
+type UserRole = Record<string, string>;
+
+const roles: UserRole = {
+  admin: "Admin",
+  user: "User",
+  guest: "Guest"
+};
+```
+
+### 6. Required<T>
+
+The opposite of Partial, this utility type makes all properties of T required, even if they were optionally defined in the original type.
+Example of Required:
+
+```
+type Props = {
+  id?: number;
+  name?: string;
+};
+
+const props: Required<Props> = {
+  id: 1,
+  name: "Required name" // Both properties must be provided
+};
+```
+
+### 7. Exclude<T, U>
+
+This utility type constructs a type by excluding from T all union members that are assignable to U. It's mainly used to manipulate types in union types.
+Example of Exclude:
+
+```
+type T = string | number | boolean;
+type Numeric = Exclude<T, string | boolean>; // Result is 'number'
+```
+
+### 8. NonNullable<T>
+
+This utility type constructs a type by excluding null and undefined from T. It's helpful in ensuring that values will definitely not be either null or undefined.
+Example of NonNullable:
+
+```
+type MaybeNumber = number | null | undefined;
+type ValidNumber = NonNullable
+```
